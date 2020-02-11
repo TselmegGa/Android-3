@@ -1,12 +1,10 @@
-package com.example.android.Utils;
+package com.example.android.utils;
 
-import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,7 +24,7 @@ public final class NetworkUtils {
         Log.v(TAG, "Built URL " + url);
         return url;
     }
-    public static String sendGET(URL url, String token) throws IOException {
+    public static String sendGET(URL url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         StringBuffer response = new StringBuffer();
         con.setRequestMethod("GET");
