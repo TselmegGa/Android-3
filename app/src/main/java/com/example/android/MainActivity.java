@@ -55,12 +55,17 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
 
         Toast.makeText(this, "Aantal opgehaalde items: " + mFeatures.size(), Toast.LENGTH_LONG).show();
 
+        //Sort by date
+//        Collections.sort(mFeatures);
+
         // specify an adapter
         setAdapter(mFeatures);
     }
     private void setAdapter(ArrayList<Feature> mFeatures){
         mAdapter = new MainRecycleViewAdapter(mFeatures, this);
         mRecyclerView.setAdapter(mAdapter);
+
+        Log.d(MainActivity.class.getSimpleName(), "Adapter has been set.");
     }
 
     private ArrayList<Feature> getFeatures(){
@@ -71,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        Log.d(MainActivity.class.getSimpleName(), "Features has been retrieved.");
         return features;
     }
 
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
         String material = null;
         ArrayList<Feature> prefFeatures = new ArrayList<>();
         for (Feature item: features) {
-            Log.v("",item.getMaterial());
+//            Log.v(MainActivity.class.getSimpleName(),item.getMaterial());
             if (item.getMaterial().contains("Bronze")|| item.getMaterial().contains("bronze") || item.getMaterial().contains("Brons")|| item.getMaterial().contains("brons")){
                 material = "bronze";
             }
@@ -97,11 +104,9 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
             if(sharedPreferences.getBoolean(material,false)){
                 prefFeatures.add(item);
             }
-
         }
 
         return prefFeatures;
-
     }
 
     @Override
@@ -124,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_material, menu);
+
+        Log.d(MainActivity.class.getSimpleName(), "Option menu has been created.");
+
         return true;
     }
 
@@ -136,10 +144,12 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
                 if(item.isChecked()){
                     item.setChecked(false);
                     edit.putBoolean("stone", false);
+                    Log.d(MainActivity.class.getSimpleName(), "Stone set to false.");
                 }
                 else {
                     item.setChecked(true);
                     edit.putBoolean("stone", true);
+                    Log.d(MainActivity.class.getSimpleName(), "Stone set to true.");
                 }
                 edit.apply();
                 break;
@@ -147,10 +157,12 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
                 if(item.isChecked()){
                     item.setChecked(false);
                     edit.putBoolean("metal", false);
+                    Log.d(MainActivity.class.getSimpleName(), "Metal set to false.");
                 }
                 else {
                     item.setChecked(true);
                     edit.putBoolean("metal", true);
+                    Log.d(MainActivity.class.getSimpleName(), "Metal set to true.");
                 }
                 edit.apply();
                 break;
@@ -158,10 +170,12 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
                 if(item.isChecked()){
                     item.setChecked(false);
                     edit.putBoolean("glass", false);
+                    Log.d(MainActivity.class.getSimpleName(), "Glass set to false.");
                 }
                 else {
                     item.setChecked(true);
                     edit.putBoolean("glass", true);
+                    Log.d(MainActivity.class.getSimpleName(), "Glass set to true.");
                 }
                 edit.apply();
                 break;
@@ -169,10 +183,12 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
                 if(item.isChecked()){
                     item.setChecked(false);
                     edit.putBoolean("bronze", false);
+                    Log.d(MainActivity.class.getSimpleName(), "Bronze set to false.");
                 }
                 else {
                     item.setChecked(true);
                     edit.putBoolean("bronze", true);
+                    Log.d(MainActivity.class.getSimpleName(), "Bronze set to true.");
                 }
                 edit.apply();
                 break;
@@ -180,10 +196,12 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
                 if(item.isChecked()){
                     item.setChecked(false);
                     edit.putBoolean("iron", false);
+                    Log.d(MainActivity.class.getSimpleName(), "Iron set to false.");
                 }
                 else {
                     item.setChecked(true);
                     edit.putBoolean("iron", true);
+                    Log.d(MainActivity.class.getSimpleName(), "Iron set to true.");
                 }
                 edit.apply();
                 break;
