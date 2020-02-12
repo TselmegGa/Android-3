@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/material_stone"
+            android:icon="@color/colorPrimary"
+            android:title="@string/materials_stone"
+            android:checkable="true"
+            android:checked="true"/>
+        <item
+            android:id="@+id/material_metal"
+            android:icon="@color/colorPrimary"
+            android:title="@string/materials_metal"
+            android:checkable="true"
+            android:checked="true"/>
+        <item
+            android:id="@+id/material_glass"
+            android:icon="@color/colorPrimary"
+            android:title="@string/materials_glass"
+            android:checkable="true"
+            android:checked="true"/>
+        <item
+            android:id="@+id/material_bronze"
+            android:icon="@color/colorPrimary"
+            android:title="@string/materials_bronze"
+            android:checkable="true"
+            android:checked="true"/>
+        <item
+            android:id="@+id/material_iron"
+            android:icon="@color/colorPrimary"
+            android:title="@string/materials_iron"
+            android:checkable="true"
+            android:checked="true"/>
+    </group>
+</menu>

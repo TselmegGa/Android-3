@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Android</string>
+    <string name="materials_stone">Steen</string>
+    <string name="materials_metal">Metaal</string>
+    <string name="materials_glass">Glas</string>
+    <string name="materials_bronze">Brons</string>
+    <string name="materials_iron">Ijzer</string>
+
 </resources>
