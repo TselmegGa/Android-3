@@ -91,13 +91,15 @@ public class GetItemAsyncTask extends AsyncTask<Void, Void, ArrayList<Feature>> 
                     urlObject = featureJson.getString("URL");
                 }
 
-                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+                SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Date date = null;
 
                 if(featureJson.has("PLAATSINGSDATUM") && !featureJson.isNull("PLAATSINGSDATUM")){
-                    int dateInt = featureJson.getInt("PLAATSINGSDATUM");
+                    String inputDate = featureJson.getString("PLAATSINGSDATUM");
                     try {
-                        date = originalFormat.parse("" + dateInt);
+                        Date inputDateRaw = new Date(Long.parseLong(inputDate));
+                        String dateRaw = newFormat.format(inputDateRaw);
+                        date = newFormat.parse(dateRaw);
                     } catch (ParseException e){
                         e.printStackTrace();
                     }

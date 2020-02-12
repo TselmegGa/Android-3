@@ -1,8 +1,11 @@
 package com.example.android.model;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Feature {
+public class Feature implements Comparable<Feature> {
     private int id;
     private String identification;
     private String object;
@@ -59,11 +62,34 @@ public class Feature {
         return substrate;
     }
 
-    public Date getDate() {
+    public String getDate() {
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String dateProcessed = "Onbekend";
+
+        try {
+            dateProcessed = newFormat.format(date);
+        }
+        catch (Exception e)
+        {
+//            Log.d(Feature.class.getSimpleName(), e.toString());
+        }
+
+        return dateProcessed;
+    }
+
+    public Date getDateTime() {
         return date;
     }
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    @Override
+    public int compareTo(Feature o) {
+        if (getDateTime() == null || o.getDateTime() == null)
+            return 0;
+
+        return getDateTime().compareTo(o.getDateTime());
     }
 }

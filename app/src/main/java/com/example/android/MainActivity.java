@@ -14,6 +14,7 @@ import com.example.android.model.Feature;
 import com.example.android.tasks.GetItemAsyncTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements MainOnclickHandle
         }
 
         Toast.makeText(this, "Aantal opgehaalde items: " + mFeatures.size(), Toast.LENGTH_LONG).show();
+
+//        Collections.sort(mFeatures);
 
         // specify an adapter
         mAdapter = new MainRecycleViewAdapter(mFeatures, this);
