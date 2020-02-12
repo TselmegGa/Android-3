@@ -1,28 +1,35 @@
 package com.example.android;
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.model.Feature;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleViewAdapter.ViewHolder> {
-    private List<Feature> mActivities;
+    private ArrayList<Feature> mFeatures;
 
     private final MainOnclickHandler mClickHandler;
 
-    public MainRecycleViewAdapter(List<Feature> activities, MainOnclickHandler mClickHandler) {
-        this.mActivities = activities;
+    public MainRecycleViewAdapter(ArrayList<Feature> features, MainOnclickHandler mClickHandler) {
+        this.mFeatures = features;
         this.mClickHandler = mClickHandler;
     }
+
     @NonNull
     @Override
     public MainRecycleViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,13 +48,12 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         // holder is the (already created) activity_list_item (= ViewHolder-object)
         // - gets element from your dataset at this position
         // - replaces the contents of the view with that element
-        final Feature feature = mActivities.get(position);
+        final Feature feature = mFeatures.get(position);
 
         holder.name.setText(feature.getObject());
-        holder.description.setText(feature.getDescription());
-
-
-
+        holder.geography.setText(feature.getGeography());
+        holder.identification.setText(feature.getIdentification());
+        Picasso.get().load(Uri.parse(feature.getImageUrl())).into(holder.image);
     }
 
     @Override
@@ -57,35 +63,34 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     @Override
     public int getItemCount() {
-        return mActivities.size();
-
+        return mFeatures.size();
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // ViewHolder is the view of a activity_list_view
         // one drink_list_item contains 3 views
         // Provide a reference to each view in the activity_list_item
-        private TextView name;
-        private TextView description;
-
         private TextView id;
-
-
-
+        private TextView name;
+        private TextView geography;
+        private TextView identification;
+        private ImageView image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.activity_item_name);
-            description = (TextView) itemView.findViewById(R.id.activity_item_description);
-            id = (TextView) itemView.findViewById(R.id.activity_item_id);
 
+            itemView.setOnClickListener(this);
+
+            id              = itemView.findViewById(R.id.feature_id);
+            name            = itemView.findViewById(R.id.feature_object);
+            geography       = itemView.findViewById(R.id.feature_geography);
+            identification  = itemView.findViewById(R.id.feature_identification);
+            image           = itemView.findViewById(R.id.feature_image);
         }
 
         @Override
         public void onClick(View v) {
-            mClickHandler.onActivityClick(v, Integer.parseInt(id.getText().toString()));
+            mClickHandler.onActivityClick(v, this.getLayoutPosition(), mFeatures);
         }
     }
 }

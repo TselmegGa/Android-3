@@ -1,6 +1,8 @@
 package com.example.android.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.android.MainActivity;
 import com.example.android.model.Feature;
@@ -16,62 +18,98 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class GetItemAsyncTask extends AsyncTask<String, Void, String> {
+public class GetItemAsyncTask extends AsyncTask<Void, Void, ArrayList<Feature>> {
+    private JSONArray array;
 
-        private MainActivity main;
+    @Override
+    protected ArrayList<Feature> doInBackground(Void... str) {
+        ArrayList<Feature> features = new ArrayList<>();
 
-        public GetItemAsyncTask(MainActivity main) {
-            this.main = main;
+        URL url = NetworkUtils.buildUrl();
+        String response = null;
+
+        try {
+            response = NetworkUtils.sendGET(url);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        @Override
-        protected String doInBackground(String... str) {
+        try {
+            if(response != null) {
+                JSONObject json = new JSONObject(response);
+                array = json.getJSONArray("features");
+            } else
+                throw new RuntimeException("Response is null.");
 
+            for (int i=0; i < array.length(); i++) {
+                JSONObject jArray = array.getJSONObject(i);
+                JSONObject featureJson = jArray.getJSONObject("attributes");
 
-            URL url = NetworkUtils.buildUrl();
-            String response = null;
-            try {
-                response = NetworkUtils.sendGET(url);
+                int id = 0;
+                String identification = "";
+                String object = "";
+                String geography = "";
+                String artist = "";
+                String material = "";
+                String desc = "";
+                String substrate = "";
+                String urlObject = "";
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            System.out.println(response);
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String str) {
-            ArrayList<Feature> features = new ArrayList<>();
-            try {
-                JSONObject j = new JSONObject(str);
-                JSONArray jsonArray = j.getJSONArray("features");
-                JSONObject json = new JSONObject();
-                JSONObject jArray;
-                for (int i=0;i<jsonArray.length();i++) {
-                    jArray = jsonArray.getJSONObject(i);
-
-                    json = jArray.getJSONObject("attributes");
-                    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
-                    Date date = null;
-                    if(json.has("PLAATSINGSDATUM") && !json.isNull("PLAATSINGSDATUM")){
-                        int dateInt = json.getInt("PLAATSINGSDATUM");
-                        try {
-                            date = originalFormat.parse("" + dateInt);
-                        } catch (ParseException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-                    Feature feature = new Feature(json.getInt("OBJECTID"), json.getString("IDENTIFICATIE"), json.getString("AANDUIDINGOBJECT"), json.getString("GEOGRAFISCHELIGGING"), json.getString("KUNSTENAAR"), json.getString("MATERIAAL"), json.getString("OMSCHRIJVING"), json.getString("ONDERGROND"), date , json.getString("URL"));
-                    features.add(feature);
+                if (featureJson.has("OBJECTID")) {
+                    id = featureJson.getInt("OBJECTID");
                 }
-                main.linkAdapter(features);
-            } catch(JSONException e){
-                e.printStackTrace();
+
+                if (featureJson.has("IDENTIFICATIE")) {
+                    identification = featureJson.getString("IDENTIFICATIE");
+                }
+
+                if (featureJson.has("AANDUIDINGOBJECT")) {
+                    object = featureJson.getString("AANDUIDINGOBJECT");
+                }
+
+                if (featureJson.has("GEOGRAFISCHELIGGING")) {
+                    geography = featureJson.getString("GEOGRAFISCHELIGGING");
+                }
+
+                if (featureJson.has("KUNSTENAAR")) {
+                    artist = featureJson.getString("KUNSTENAAR");
+                }
+
+                if (featureJson.has("MATERIAAL")) {
+                    material = featureJson.getString("MATERIAAL");
+                }
+
+                if (featureJson.has("OMSCHRIJVING")) {
+                    desc = featureJson.getString("OMSCHRIJVING");
+                }
+
+                if (featureJson.has("ONDERGROND")) {
+                    substrate = featureJson.getString("ONDERGROND");
+                }
+
+                if (featureJson.has("URL")) {
+                    urlObject = featureJson.getString("URL");
+                }
+
+                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+                Date date = null;
+
+                if(featureJson.has("PLAATSINGSDATUM") && !featureJson.isNull("PLAATSINGSDATUM")){
+                    int dateInt = featureJson.getInt("PLAATSINGSDATUM");
+                    try {
+                        date = originalFormat.parse("" + dateInt);
+                    } catch (ParseException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                Feature feature = new Feature(id, identification, object, geography, artist, material, desc, substrate, date, urlObject);
+                features.add(feature);
             }
-
+        } catch(JSONException e){
+            e.printStackTrace();
+            return features;
         }
-
-
+        return features;
+    }
 }
